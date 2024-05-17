@@ -34,6 +34,27 @@ mkdir new_folder
 ```bash
 rm file.txt
 ```
+## » cp:
+- The cp command is used in Unix-like operating systems (such as Linux and macOS) to copy files and directories. Its syntax is straightforward:
+
+```bash
+cp [options] source destination
+```
+- ##### cp: This is the command itself, indicating that you want to copy files or directories.
+- ##### [options]: Optional parameters you can add to modify the behavior of the cp command. Some common options include -r for recursive copying (for directories) and -i for interactive copying (prompts before overwriting existing files).
+- ##### source: This is the file or directory you want to copy from.
+- ##### destination: This is the location where you want to copy the file or directory to.
+
+#### For example, to copy a file named file.txt from the current directory to /home/user/documents/, you would use :
+
+  ```bash
+  cp file.txt /home/user/documents/
+  ```
+#### To copy a directory named folder and all its contents to /home/user/backups/, you would use :
+
+  ```bash
+  cp -r folder /home/user/backups/
+  ```
 
 ## » mv: 
 - Move files to directories.
