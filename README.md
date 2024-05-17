@@ -141,14 +141,14 @@ pip freeze
   ```
 ###### We can revert this action after completing the migrations; otherwise, it may cause errors when executing the migration commands.
 
-##### Run Migration commands :
-
-```bash
-python manage.py makemigrations
-```
+##### Run Migration commands in the same order :
 
 ```bash
 python manage.py migrate
+```
+
+```bash
+python manage.py makemigrations
 ```
 
 ###### Now uncomment the URLs that were previously commented.
