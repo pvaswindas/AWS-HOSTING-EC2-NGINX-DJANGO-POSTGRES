@@ -2,6 +2,7 @@
 
 This guide will walk you through the steps of hosting a Django project with PostgreSQL as the database on an AWS EC2 instance, and configuring Nginx as the server to serve the Django application.
 
+
 # Step 1: Creating an EC2 instance in AWS
 ### Sign in to AWS Console:
 - Create an  AWS account at https://aws.amazon.com/.
@@ -15,6 +16,7 @@ This guide will walk you through the steps of hosting a Django project with Post
 - Here we are configuring an EC2 instance with Ubuntu 64-bit OS and t3.micro type, eligible for AWS Free Tier.
 - Create and download your PEM file from the "Key pair" section, giving it your project name.
 - Verify EC2 instance network settings and permissions: Ensure "Allow SSH," "Allow HTTPS," and "Allow HTTP" are enabled. Then, click "Launch Instance."
+
 
 # Step 2: Establishing Connection with Your EC2 Instance
 ### Copy the SSH login command:
@@ -37,6 +39,7 @@ This guide will walk you through the steps of hosting a Django project with Post
 - sudo apt update
 - sudo apt install python3-pip python3-dev libpq-dev postgresql postgresql-contrib nginx curl
 
+
 # Step 3: Setting Up Database in Postgres
 - Connect to postgres   :   sudo -u postgres psql
 - Create database   :   CREATE DATABASE project_name;
@@ -44,13 +47,66 @@ This guide will walk you through the steps of hosting a Django project with Post
 - Grant permissions   :   GRANT ALL PRIVILEGES ON DATABASE project_name TO user_name;
 - Exit postgres   :   \q
 
+
 # Step 4: PIP Installation & Git Cloning
-- Install pip    :   sudo apt install python3-pip
-- Install virtual environment   :   sudo apt install python3.12-venv
-- Create a virtual env   :   python3 -m venv env
-- Confirm environment creation   :   ls
-- Activate virtual env   :   source env/bin/activate
-- Install psycopg2-binary   :   pip install psycopg2-binary
-- Clone the git repository   :   git clone https://github.com/octocat/Spoon-Knife
-- Confirm git cloning   :   ls
+### » Install pip
+```bash
+sudo apt install python3-pip
+```
+### » Install virtual environment
+```bash
+sudo apt install python3.12-venv
+```
+### » Create a virtual env
+```bash
+python3 -m venv env
+```
+### » Activate virtual env
+```bash
+source env/bin/activate
+```
+### » Install psycopg2-binary
+```bash
+pip install psycopg2-binary
+```
+### » Clone the git repository
+##### Replace `<your-git-repository-url>` with the URL of your Git repository.
+```bash
+git clone <your-git-repository-url>
+```
+
+
+# Step 5: Configure settings.py file
+- Navigate to the project's root directory containing the manage.py file.
+- Helpful commands :
+  - "ls" to list all directories present in this file.
+  - "pwd" to display the current directory's path.
+  - "cd" to navigate to different directories. For example: "cd project_file_name".
+- Navigate to the project's root directory using cd
+- Open settings.py file in an editor : sudo nano settings.py
+- 
+### Configure the database with the details previously created on PostgreSQL : 
+##### Replace `database_name`, `user_name`, and `user_password` with the details previously created.
+```bash
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "database_name",
+        "USER": "user_name",
+        "PASSWORD": "user_password",
+        "HOST": "localhost",
+        "PORT": "5432",
+    }
+}
+```
+
+### Also make changes in the static configuration
+```bash
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+  os.path.join(BASE_DIR, 'static'),
+]
+```
 
