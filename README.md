@@ -12,10 +12,9 @@ This guide will walk you through the steps of hosting a Django project with Post
 - In the "Name and tags" section, enter your project name (optional).
 - Choose an operating system from the Application and OS Images section, like Ubuntu or Linux.
 - Select an instance type that aligns with the requirements of your project.
-- Here we're configuring an EC2 instance with the Ubuntu 64-bit operating system and the t3.micro instance type, which qualifies for the AWS Free Tier.
-- Create and Download Your PEM File from the "Key pair" section: To establish a secure connection with your EC2 instance, you'll require a PEM (Privacy Enhanced Mail) file containing your private key. Give the PEM file your project name.
-- Configuring Network Settings and Permissions: Now, let's verify that your EC2 instance has the required network settings and permissions to communicate externally. Ensure that "Allow SSH traffic from," "Allow HTTPS traffic from the internet," and "Allow HTTP traffic from the internet" are enabled or selected.
--  Now, proceed by clicking on "Launch Instance."
+- Here we are configuring an EC2 instance with Ubuntu 64-bit OS and t3.micro type, eligible for AWS Free Tier.
+- Create and download your PEM file from the "Key pair" section, giving it your project name.
+- Verify EC2 instance network settings and permissions: Ensure "Allow SSH," "Allow HTTPS," and "Allow HTTP" are enabled. Then, click "Launch Instance."
 
 # Step 2: Establishing Connection with Your EC2 Instance
 ### Copy the SSH login command:
@@ -30,3 +29,12 @@ This guide will walk you through the steps of hosting a Django project with Post
   - For Windows: "icacls key_name.pem /inheritance:r /grant:r %USERNAME%:R"
 - Make sure to replace "key_name.pem" with the actual name of your .pem file.
 
+### Access the instance by logging in:
+- Now, paste the command copied earlier from the SSH client tab.
+- After pasting the command, you may encounter a prompt about host authenticity. Type "yes" and press Enter to continue connecting.
+
+### Installing required dependencies:
+- sudo apt update
+- sudo apt install python3-pip python3-dev libpq-dev postgresql postgresql-contrib nginx curl
+
+# Step 3: Setting Up Database in Postgres
