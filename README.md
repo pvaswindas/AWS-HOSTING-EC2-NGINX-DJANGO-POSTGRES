@@ -38,3 +38,19 @@ This guide will walk you through the steps of hosting a Django project with Post
 - sudo apt install python3-pip python3-dev libpq-dev postgresql postgresql-contrib nginx curl
 
 # Step 3: Setting Up Database in Postgres
+- Connect to postgres   :   sudo -u postgres psql
+- Create database   :   CREATE DATABASE project_name;
+- Create user   :   CREATE USER user_name WITH PASSWORD 'password';
+- Grant permissions   :   GRANT ALL PRIVILEGES ON DATABASE project_name TO user_name;
+- Exit postgres   :   \q
+
+# Step 4: PIP Installation & Git Cloning
+- Install pip    :   sudo apt install python3-pip
+- Install virtual environment   :   sudo apt install python3.12-venv
+- Create a virtual env   :   python3 -m venv env
+- Confirm environment creation   :   ls
+- Activate virtual env   :   source env/bin/activate
+- Install psycopg2-binary   :   pip install psycopg2-binary
+- Clone the git repository   :   git clone https://github.com/octocat/Spoon-Knife
+- Confirm git cloning   :   ls
+
