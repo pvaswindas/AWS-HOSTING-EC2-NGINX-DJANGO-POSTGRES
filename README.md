@@ -90,12 +90,12 @@ git clone <your-git-repository-url>
 ```bash
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "database_name",
         "USER": "user_name",
         "PASSWORD": "user_password",
         "HOST": "localhost",
-        "PORT": "5432",
+        "PORT": "",
     }
 }
 ```
@@ -110,3 +110,55 @@ STATICFILES_DIRS = [
 ]
 ```
 
+# Step 6: Dependencies, Migration, Superuser, Static
+### Install Requirements
+###### Navigate to your project's root directory and execute this command :
+```bash
+pip install -r requirements.txt 
+```
+###### You have to create requirements.txt in your root directory before using this command.
+
+##### Verify the installation :
+```bash
+pip freeze
+```
+### Migrate
+##### Comment out the urls :
+- Navigate into the main directory of your project, where settings.py is located, using the "cd" command.
+- Open the `url.py` file in the main directory of project using the nano editor :
+  
+  ```bash
+  sudo nano urls.py
+  ```
+###### We need to comment out all the URLs except for admin.site.urls.
+  ```bash
+  urlpatterns = [
+    path("admin/", admin.site.urls),
+    # path("", include("user.urls")),
+    # path("", include("admin.urls")),
+    # path("accounts/", include("allauth.urls"), name="accounts"),
+  ]
+  ```
+###### We can revert this action after completing the migrations; otherwise, it may cause errors when executing the migration commands.
+
+##### Run Migration commands :
+
+```bash
+python manage.py makemigrations
+```
+
+```bash
+python manage.py migrate
+```
+
+###### Now uncomment the URLs that were previously commented.
+
+##### Create Superuser :
+```bash
+python manage.py createsuperuser
+```
+
+##### Collect Static Files :
+```bash
+python manage.py collectstatic
+```
