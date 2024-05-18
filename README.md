@@ -36,16 +36,41 @@ This guide will walk you through the steps of hosting a Django project with Post
 - After pasting the command, you may encounter a prompt about host authenticity. Type "yes" and press Enter to continue connecting.
 
 ### Installing required dependencies:
+```bash
 - sudo apt update
+```
+```bash
 - sudo apt install python3-pip python3-dev libpq-dev postgresql postgresql-contrib nginx curl
-
+```
 
 # Step 3: Setting Up Database in Postgres
-- Connect to postgres   :   sudo -u postgres psql
-- Create database   :   CREATE DATABASE project_name;
-- Create user   :   CREATE USER user_name WITH PASSWORD 'password';
-- Grant permissions   :   GRANT ALL PRIVILEGES ON DATABASE project_name TO user_name;
-- Exit postgres   :   \q
+- Connect to postgres   :
+  ```bash
+  sudo -u postgres psql
+  ```
+- Create database   :
+
+  ```bash
+  CREATE DATABASE project_name;
+  ```
+- Create user   :
+
+  ```bash
+  CREATE USER user_name WITH PASSWORD 'password';
+  ```
+- Grant permissions   :
+
+  ```bash
+  GRANT ALL PRIVILEGES ON DATABASE project_name TO user_name;
+  ```
+  ```bash
+  GRANT USAGE ON SCHEMA schema_name TO username;
+  ```
+- Exit postgres   :
+
+  ```bash
+  \q
+  ```
 
 
 # Step 4: PIP Installation & Git Cloning
