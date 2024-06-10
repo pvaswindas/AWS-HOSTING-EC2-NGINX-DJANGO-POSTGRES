@@ -24,7 +24,7 @@ This guide will walk you through the steps of hosting a Django project with Post
 - Click on the "Connect" button located at the top right corner.
 - Select the SSH client and copy the SSH login command from the Example section (ssh -i key_.pem ec2-user@your-ec2-instance-public-ip).
 
-### Granting permissions to the .pem file:
+### Changing permissions to the .pem file:
 - Open Command Prompt (or Terminal) in the directory where the .pem file is located.
 - Enter the command to change the .pem file permissions, setting it to read-only for the owner:
   - For Linux: "chmod 400 key_name.pem"
@@ -37,10 +37,10 @@ This guide will walk you through the steps of hosting a Django project with Post
 
 ### Installing required dependencies:
 ```bash
-- sudo apt update
+sudo apt update
 ```
 ```bash
-- sudo apt install python3-pip python3-dev libpq-dev postgresql postgresql-contrib nginx curl
+sudo apt install python3-pip python3-dev libpq-dev postgresql postgresql-contrib nginx curl
 ```
 
 # Step 3: Setting Up Database in Postgres
