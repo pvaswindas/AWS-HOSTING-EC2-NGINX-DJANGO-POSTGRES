@@ -189,8 +189,30 @@ python manage.py createsuperuser
 ```bash
 python manage.py collectstatic
 ```
+<br/>
 
-# Step 7: Setting up gunicorn
+# Step 7: Test the website to check whether the server is running
+
+- Run the command to run the nginx server:
+
+  ```bash
+  sudo systemctl start nginx
+  ```
+
+- You can check if Nginx is running using this command:
+
+  ```bash
+  sudo systemctl restart nginx
+  ```
+- Now, verify that the server is running by accessing the Auto-assigned IP in the instance dashboard.
+- This should display the Nginx default page.
+- Next, we need to configure Nginx to serve our website.
+  
+
+<br/>
+
+# Step 8: Setting up gunicorn
+
 - It is necessary to install Gunicorn and configure it to run our Python website with Nginx.
   
   ```bash
@@ -266,4 +288,4 @@ server {
   ```bash
   gunicorn --bind 0.0.0.0:9090 project_name.wsgi
   ```
-   
+- Now, load the page using the auto-assigned IP in your browser to verify if your page is loading.
