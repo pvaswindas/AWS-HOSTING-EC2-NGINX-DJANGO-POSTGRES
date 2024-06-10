@@ -214,7 +214,7 @@ python manage.py collectstatic
 ```bash
 server {
   listen 80;
-  server_name your_domain.com www.your_domain.com;
+  server_name _;
 
   location / {
     proxy_pass http://0.0.0.0:9090;
@@ -236,6 +236,34 @@ server {
   sudo ln -s /etc/nginx/sites-available/file_name /etc/nginx/sites-enabled/file_name
   ```
 - You can verify whether the symbolic link is created by navigating to the 'sites-enabled' directory using the following command:
+  
   ```bash
   cd /etc/nginx/sites-enabled/
   ```
+  
+  ```bash
+  ls
+  ```
+- We've added hosts for the website to run. Therefore, in our project's settings.py file, we need to include these hosts in the 'ALLOWED_HOSTS' area.
+- Navigate to the directory where your settings.py file exists, and open it using the command: `sudo nano settings.py`.
+- There will be a blank are for adding the "ALLOWED HOSTS", make the changes there:
+
+  `In the 'Auto-assigned IP address' section, replace the placeholder with the IP address assigned to your instance, as displayed in your instance dashboard.`
+
+  ```bash
+  ALLOWED_HOSTS = ['Auto-assigned IP address', '0.0.0.0']
+  ```
+- Save the settings file by pressing `Ctrl + O`, then press `Enter` to confirm, and exit the nano editor by pressing `Ctrl + X`. After that, navigate back to your root directory.
+- Now restart Nginx using this command:
+
+  ```bash
+  sudo service nginx restart
+  ```
+- After that, we need to run the Gunicorn server to ensure the website is being served.
+
+  `You need to change the project_name.wsgi with the proper name which will be seen in the setting file Example : WSGI_APPLICATION = "project_name.wsgi.application" , from this only take the project_name.wsgi`
+
+  ```bash
+  gunicorn --bind 0.0.0.0:9090 project_name.wsgi
+  ```
+   
