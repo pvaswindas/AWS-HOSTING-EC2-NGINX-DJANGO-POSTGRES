@@ -11,10 +11,11 @@ This guide will walk you through the steps of hosting a Django project with Post
 - On the EC2 dashboard, choose the instances or simply click on "Launch Instance."
 - To create a new instance, click on "Launch Instance."
 - In the "Name and tags" section, enter your project name (optional).
-- Choose an operating system from the Application and OS Images section, like Ubuntu or Linux.
+- Choose an operating system from the Application and OS Images section, `I prefer Ubuntu`.
 - Select an instance type that aligns with the requirements of your project.
 - Here we are configuring an EC2 instance with Ubuntu 64-bit OS and t3.micro type, eligible for AWS Free Tier.
 - Create and download your PEM file from the "Key pair" section, giving it your project name.
+  `Store the PEM file in an appropriate directory and do not delete it, as it cannot be recreated.`
 - Verify EC2 instance network settings and permissions: Ensure "Allow SSH," "Allow HTTPS," and "Allow HTTP" are enabled. Then, click "Launch Instance."
 
 
@@ -27,9 +28,10 @@ This guide will walk you through the steps of hosting a Django project with Post
 ### Changing permissions to the .pem file:
 - Open Command Prompt (or Terminal) in the directory where the .pem file is located.
 - Enter the command to change the .pem file permissions, setting it to read-only for the owner:
+
+  `Make sure to replace "key_name.pem" with the actual name of your .pem file.`
   - For Linux: "chmod 400 key_name.pem"
   - For Windows: "icacls key_name.pem /inheritance:r /grant:r %USERNAME%:R"
-- Make sure to replace "key_name.pem" with the actual name of your .pem file.
 
 ### Access the instance by logging in:
 - Now, paste the command copied earlier from the SSH client tab.
@@ -64,7 +66,7 @@ sudo apt install python3-pip python3-dev libpq-dev postgresql postgresql-contrib
   GRANT ALL PRIVILEGES ON DATABASE project_name TO user_name;
   ```
   ```bash
-  GRANT USAGE ON SCHEMA schema_name TO username;
+  GRANT ALL PRIVILEGES ON SCHEMA PUBLIC TO username;
   ```
 - Exit postgres   :
 
@@ -176,14 +178,64 @@ python manage.py migrate
 python manage.py makemigrations
 ```
 
-###### Now uncomment the URLs that were previously commented.
-
 ##### Create Superuser :
 ```bash
 python manage.py createsuperuser
 ```
+###### Now uncomment the URLs that were previously commented.
 
 ##### Collect Static Files :
+
 ```bash
 python manage.py collectstatic
 ```
+
+# Step 7: Setting up gunicorn
+- It is necessary to install Gunicorn and configure it to run our Python website with Nginx.
+  
+  ```bash
+  pip install gunicorn
+  ```
+- It is necessary to proxy pass the server requests coming to the Nginx port to the Gunicorn port.
+- We need to configure a new file to proxy pass the Gunicorn port in Nginx. To do that, let's navigate to the Nginx sites-available directory.
+- Execute this command to navigate to the Nginx sites-available directory.
+  ```bash
+  cd /etc/nginx/sites-available/
+  ```
+- Run the command `ls` to check if the "default" file exists in the directory, which serves as the default configuration file for Nginx.
+- The default file contains the configuration for displaying the Nginx default page. We should create another file for our website to maintain the standardization without altering the default configuration.
+- Now create a new file there with your project/website name instead of `website_name`
+  ```bash
+  sudo nano website_name
+  ```
+- Executing this command will open a blank file in the nano editor.
+- Please add the following configurations, making any necessary changes where needed:
+  
+```bash
+server {
+  listen 80;
+  server_name your_domain.com www.your_domain.com;
+
+  location / {
+    proxy_pass http://0.0.0.0:9090;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+}
+```
+- Now save the file using `ctrl + o`
+- Exit the file using `ctrl + x`
+- Now that we've created a new file adding the Gunicorn port to run the website, it's currently available. Next, we need to enable it.
+- There is another directory called 'sites-enabled'. We need to create the same file there as well.
+- Instead of creating it manually, We can simply create a link from 'sites-available' to 'sites-enabled' and synchronize it, which is called a `symbolic link`.
+- From the 'sites-available' directory, execute this command to create the symbolic link, replacing 'file_name' with the name of the file you have created:
+  
+  ```bash
+  sudo ln -s /etc/nginx/sites-available/file_name /etc/nginx/sites-enabled/file_name
+  ```
+- You can verify whether the symbolic link is created by navigating to the 'sites-enabled' directory using the following command:
+  ```bash
+  cd /etc/nginx/sites-enabled/
+  ```
