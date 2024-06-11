@@ -2,6 +2,7 @@
 
 This guide will walk you through the steps of hosting a Django project with PostgreSQL as the database on an AWS EC2 instance, and configuring Nginx as the server to serve the Django application.
 
+## First, read each step completely before executing it.
 
 # Step 1: Creating an EC2 instance in AWS
 ### Sign in to AWS Console:
@@ -211,7 +212,18 @@ python manage.py collectstatic
 
 <br/>
 
-# Step 8: Setting up gunicorn
+# Step 8: Setting Domain Name
+
+- To set a domain name for your website, you'll need to purchase a domain name from a provider such as GoDaddy or Hostinger.
+- After purchasing the domain, you'll need to connect it with your instance, a process known as Domain Name Resolution.
+- In your AWS Dashboard, search for "Route 53", which is a scalable DNS and domain name registration service.
+- You can refer to the YouTube video to connect your EC2 instance with the domain you bought on GoDaddy:
+
+  [https://youtu.be/hRSj2n-XKGM?si=d6T1r_PBzYydLVv9](https://youtu.be/hRSj2n-XKGM?si=d6T1r_PBzYydLVv9)
+
+<br/>
+
+# Step 9: Setting up gunicorn
 
 - It is necessary to install Gunicorn and configure it to run our Python website with Nginx.
   
@@ -236,7 +248,7 @@ python manage.py collectstatic
 ```bash
 server {
   listen 80;
-  server_name _;
+  server_name your_domain_name.com www.your_domain_name.com;
 
   location / {
     proxy_pass http://0.0.0.0:9090;
@@ -247,8 +259,8 @@ server {
   }
 }
 ```
-- Now save the file using `ctrl + o`
-- Exit the file using `ctrl + x`
+- Now save the file using `Ctrl + O`
+- Exit the file using `Ctrl + x`
 - Now that we've created a new file adding the Gunicorn port to run the website, it's currently available. Next, we need to enable it.
 - There is another directory called 'sites-enabled'. We need to create the same file there as well.
 - Instead of creating it manually, We can simply create a link from 'sites-available' to 'sites-enabled' and synchronize it, which is called a `symbolic link`.
@@ -289,3 +301,6 @@ server {
   gunicorn --bind 0.0.0.0:9090 project_name.wsgi
   ```
 - Now, load the page using the auto-assigned IP in your browser to verify if your page is loading.
+
+### There is a possibility that static files are not being served. If you encounter this issue, follow these steps:
+- Need to give location of the static files in the ngnix configuration
