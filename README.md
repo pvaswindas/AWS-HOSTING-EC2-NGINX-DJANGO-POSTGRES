@@ -27,10 +27,13 @@ This guide will walk you through the steps of hosting a Django project with Post
 - Select the SSH client and copy the SSH login command from the Example section (ssh -i key_.pem ec2-user@your-ec2-instance-public-ip).
 
 ### Changing permissions to the .pem file:
-- Open Command Prompt (or Terminal) in the directory where the .pem file is located.
+- Open Command Prompt/ Git Bash (I prefer Git Bash) in the directory where the .pem file is located.
 - Enter the command to change the .pem file permissions, setting it to read-only for the owner:
-
+  
   `Make sure to replace "key_name.pem" with the actual name of your .pem file.`
+
+  If you are using Git Bash, you can execute Linux commands. Git Bash on Windows supports Linux commands.
+  
   - For Linux: "chmod 400 key_name.pem"
   - For Windows: "icacls key_name.pem /inheritance:r /grant:r %USERNAME%:R"
 
@@ -361,6 +364,29 @@ This command changes the ownership of the `static` directory and all its content
   ```nginx
   sudo apt install certbot python3-certbot-nginx
   ```
+
+- Allowing HTTPS Through the Firewall
+
+  We need to allow HTTPS traffic, so let's check if Nginx has registered it.
+
+  Check the firewall status:
+  ```nginx
+  sudo ufw status
+  ```
+
+  If the status is inactive, you can skip this step. However, if it is active, run the following commands to enable HTTPS traffic. It is advisable to block all other ports except the ones you want to allow traffic
+  through.
+
+  Enable HTTPS traffic:
+  
+  ```nginx
+  sudo ufw allow 'Nginx Full'
+  
+  ```
+  ```nginx
+  sudo ufw delete allow 'Nginx HTTP'
+  ```
+  
 - Obtain an SSL Certificate
 
   To acquire an SSL certificate, execute the following command and follow the prompts:
@@ -368,10 +394,36 @@ This command changes the ownership of the `static` directory and all its content
   `Replace your_domain.com with the domain name you purchased from GoDaddy`
 
   ```bash
-  sudo certbot --nginx -d your_domain.com
+  sudo certbot --nginx -d your_domain.com -d www.your_domain.com
   ```
 
-  This will acquire an SSL certificate for your domain and configure Nginx to use it.
+---
+
+- Now a prompt will come like this:
+
+  ```plaintext
+  Obtaining a new certificate
+  Performing the following challenges:
+  http-01 challenge for prodproject.net
+  Waiting for verification...
+  Cleaning up challenges
+  Deploying Certificate to VirtualHost /etc/nginx/sites-enabled/prod_project.conf
+  Please choose whether or not to redirect HTTP traffic to HTTPS, removing HTTP access.
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  1: No redirect - Make no further changes to the webserver configuration.
+  2: Redirect - Make all requests redirect to secure HTTPS access. Choose this for
+  new sites, or if you're confident your site works on HTTPS. You can undo this
+  change by editing your web server's configuration.
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  Select the appropriate number [1-2] then [enter] (press 'c' to cancel):
+  ```
+  
+  You should select option **2** here to redirect all the HTTP requests to HTTPS.
+
+---
+
+    
+- This will acquire an SSL certificate for your domain and configure Nginx to use it.
 
 - Update Nginx Configuration
 
@@ -380,6 +432,7 @@ This command changes the ownership of the `static` directory and all its content
   ```bash
   sudo nano /etc/nginx/sites-available/your_site
   ```
+  
 - Locate the server block in your configuration file and insert the following lines within the server block:
 
   ```nginx
@@ -399,3 +452,25 @@ This command changes the ownership of the `static` directory and all its content
   ```nginx
   sudo nginx -t
   ```
+- Verifying Certbot Auto-Renewal
+
+  Let’s Encrypt certificates expire every ninety days, prompting users to automate renewal. Certbot manages this process, but we still need to verify its functionality.
+
+  ```nginx
+  sudo certbot renew --dry-run
+  ```
+
+- Now you can check the page by running the server:
+
+  ```nginx
+  sudo service nginx restart
+  ```
+
+  ```nginx
+  gunicorn --bind 0.0.0.0:9090 project_name.wsgi
+  ```
+- Verify if the page has switched from HTTP to HTTPS.
+
+Simply close the command prompt or Git Bash; the server will continue running.
+  
+# The hosting process is complete!
