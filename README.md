@@ -39,67 +39,67 @@ This guide will walk you through the steps of hosting a Django project with Post
 - After pasting the command, you may encounter a prompt about host authenticity. Type "yes" and press Enter to continue connecting.
 
 ### Installing required dependencies:
-```bash
+```nginx
 sudo apt update
 ```
-```bash
+```nginx
 sudo apt install python3-pip python3-dev libpq-dev postgresql postgresql-contrib nginx curl
 ```
 
 # Step 3: Setting Up Database in Postgres
 - Connect to postgres   :
-  ```bash
+  ```nginx
   sudo -u postgres psql
   ```
 - Create database   :
 
-  ```bash
+  ```nginx
   CREATE DATABASE project_name;
   ```
 - Create user   :
 
-  ```bash
+  ```nginx
   CREATE USER user_name WITH PASSWORD 'password';
   ```
 - Grant permissions   :
 
-  ```bash
+  ```nginx
   GRANT ALL PRIVILEGES ON DATABASE project_name TO user_name;
   ```
-  ```bash
+  ```nginx
   GRANT ALL PRIVILEGES ON SCHEMA PUBLIC TO username;
   ```
 - Exit postgres   :
 
-  ```bash
+  ```nginx
   \q
   ```
 
 
 # Step 4: PIP Installation & Git Cloning
 ### » Install pip
-```bash
+```nginx
 sudo apt install python3-pip
 ```
 ### » Install virtual environment
-```bash
+```nginx
 sudo apt install python3.12-venv
 ```
 ### » Create a virtual env
-```bash
+```nginx
 python3 -m venv env
 ```
 ### » Activate virtual env
-```bash
+```nginx
 source env/bin/activate
 ```
 ### » Install psycopg2-binary
-```bash
+```nginx
 pip install psycopg2-binary
 ```
 ### » Clone the git repository
 ##### Replace `<your-git-repository-url>` with the URL of your Git repository.
-```bash
+```nginx
 git clone <your-git-repository-url>
 ```
 
@@ -115,7 +115,7 @@ git clone <your-git-repository-url>
 - 
 ### Configure the database with the details previously created on PostgreSQL : 
 ##### Replace `database_name`, `user_name`, and `user_password` with the details previously created.
-```bash
+```nginx
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
@@ -129,7 +129,7 @@ DATABASES = {
 ```
 
 ### Also make changes in the static configuration
-```bash
+```nginx
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
@@ -141,13 +141,13 @@ STATICFILES_DIRS = [
 # Step 6: Dependencies, Migration, Superuser, Static
 ### Install Requirements
 ###### Navigate to your project's root directory and execute this command :
-```bash
+```nginx
 pip install -r requirements.txt 
 ```
 ###### You have to create requirements.txt in your root directory before using this command.
 
 ##### Verify the installation :
-```bash
+```nginx
 pip freeze
 ```
 ### Migrate
@@ -155,11 +155,11 @@ pip freeze
 - Navigate into the main directory of your project, where settings.py is located, using the "cd" command.
 - Open the `url.py` file in the main directory of project using the nano editor :
   
-  ```bash
+  ```nginx
   sudo nano urls.py
   ```
 ###### We need to comment out all the URLs except for admin.site.urls.
-  ```bash
+  ```nginx
   urlpatterns = [
     path("admin/", admin.site.urls),
     # path("", include("user.urls")),
@@ -171,23 +171,23 @@ pip freeze
 
 ##### Run Migration commands in the same order :
 
-```bash
+```nginx
 python manage.py migrate
 ```
 
-```bash
+```nginx
 python manage.py makemigrations
 ```
 
 ##### Create Superuser :
-```bash
+```nginx
 python manage.py createsuperuser
 ```
 ###### Now uncomment the URLs that were previously commented.
 
 ##### Collect Static Files :
 
-```bash
+```nginx
 python manage.py collectstatic
 ```
 <br/>
@@ -196,13 +196,13 @@ python manage.py collectstatic
 
 - Run the command to run the nginx server:
 
-  ```bash
+  ```nginx
   sudo systemctl start nginx
   ```
 
 - You can check if Nginx is running using this command:
 
-  ```bash
+  ```nginx
   sudo systemctl restart nginx
   ```
 - Now, verify that the server is running by accessing the Auto-assigned IP in the instance dashboard.
@@ -227,25 +227,25 @@ python manage.py collectstatic
 
 - It is necessary to install Gunicorn and configure it to run our Python website with Nginx.
   
-  ```bash
+  ```nginx
   pip install gunicorn
   ```
 - It is necessary to proxy pass the server requests coming to the Nginx port to the Gunicorn port.
 - We need to configure a new file to proxy pass the Gunicorn port in Nginx. To do that, let's navigate to the Nginx sites-available directory.
 - Execute this command to navigate to the Nginx sites-available directory.
-  ```bash
+  ```nginx
   cd /etc/nginx/sites-available/
   ```
 - Run the command `ls` to check if the "default" file exists in the directory, which serves as the default configuration file for Nginx.
 - The default file contains the configuration for displaying the Nginx default page. We should create another file for our website to maintain the standardization without altering the default configuration.
 - Now create a new file there with your project/website name instead of `website_name`
-  ```bash
+  ```nginx
   sudo nano website_name
   ```
 - Executing this command will open a blank file in the nano editor.
 - Please add the following configurations, making any necessary changes where needed:
   
-```bash
+```nginx
 server {
   listen 80;
   server_name your_domain_name.com www.your_domain_name.com;
@@ -266,16 +266,16 @@ server {
 - Instead of creating it manually, We can simply create a link from 'sites-available' to 'sites-enabled' and synchronize it, which is called a `symbolic link`.
 - From the 'sites-available' directory, execute this command to create the symbolic link, replacing 'file_name' with the name of the file you have created:
   
-  ```bash
+  ```nginx
   sudo ln -s /etc/nginx/sites-available/file_name /etc/nginx/sites-enabled/file_name
   ```
 - You can verify whether the symbolic link is created by navigating to the 'sites-enabled' directory using the following command:
   
-  ```bash
+  ```nginx
   cd /etc/nginx/sites-enabled/
   ```
   
-  ```bash
+  ```nginx
   ls
   ```
 - We've added hosts for the website to run. Therefore, in our project's settings.py file, we need to include these hosts in the 'ALLOWED_HOSTS' area.
@@ -284,23 +284,74 @@ server {
 
   `In the 'Auto-assigned IP address' section, replace the placeholder with the IP address assigned to your instance, as displayed in your instance dashboard.`
 
-  ```bash
+  ```nginx
   ALLOWED_HOSTS = ['Auto-assigned IP address', '0.0.0.0']
   ```
 - Save the settings file by pressing `Ctrl + O`, then press `Enter` to confirm, and exit the nano editor by pressing `Ctrl + X`. After that, navigate back to your root directory.
 - Now restart Nginx using this command:
 
-  ```bash
+  ```nginx
   sudo service nginx restart
   ```
 - After that, we need to run the Gunicorn server to ensure the website is being served.
 
   `You need to change the project_name.wsgi with the proper name which will be seen in the setting file Example : WSGI_APPLICATION = "project_name.wsgi.application" , from this only take the project_name.wsgi`
 
-  ```bash
+  ```nginx
   gunicorn --bind 0.0.0.0:9090 project_name.wsgi
   ```
 - Now, load the page using the auto-assigned IP in your browser to verify if your page is loading.
+---
 
-### There is a possibility that static files are not being served. If you encounter this issue, follow these steps:
+# There is a possibility that static files are not being served. If you encounter this issue, follow these steps; otherwise, skip these and proceed to step-10:
 - Need to give location of the static files in the ngnix configuration
+- To do that, navigate to your root location. From there, navigate to the location where your static files are stored.
+- After navigating to the directory where your static files are stored, use the command `pwd` to display the path of the working directory.
+- You should copy the path provided as the output.
+- Now, navigate to your website configuration file, which can be found in the 'sites-enabled' or 'sites-available' directory, and use the `sudo nano` command to open the file using the editor.
+- In the server block of your configuration, there should be a location block where you've set up the proxy_pass. We also need to add another location block for serving static files inside the server block.
+- You can use the following code snippet, making the change of pasting the static file location that you copied earlier using the `pwd` command:
+
+  ```nginx
+  location /static/ {
+    autoindex on;
+    alias /home/path/to/your/static/files/;
+  }
+  ```
+  ` Don't forget to include the last '/' in the location of static, otherwise it will not work. `
+- Save the configuration file by pressing `Ctrl + O`, then press `Enter` to confirm, and exit the nano editor by pressing `Ctrl + X`.
+- Use this command:
+```nginx
+ps aux | grep nginx
+```
+The command ps aux | grep nginx is used to list all running processes (ps aux) and filter out only those lines that contain the string "nginx" (grep nginx).
+- To grant permissions for accessing certain files or directories in web server configurations, we need to add the user `www-data` to the `ubuntu` group. The command to achieve this is:
+
+```nginx
+sudo usermod -a -G ubuntu www-data
+```
+
+This allows the web server, typically running under the `www-data` user, to access specific files or directories required for serving web content.
+
+After adding the user `www-data` to the `ubuntu` group, it's common practice to navigate into the root directory of your project and use the command:
+
+`You may need to adjust the 'static' file name in the command according to what you have named it.`
+
+```nginx
+sudo chown -R :www-data static
+```
+
+This command changes the ownership of the `static` directory and all its contents to the `www-data` group. This ensures that the web server, which typically runs under the `www-data` user or group, has the necessary permissions to read and write to the static files within your project.
+- Now restart the Nginx server:
+  ```nginx
+  sudo service nginx restart
+  ```
+- Run the Gunicorn server:
+
+  ```nginx
+  gunicorn --bind 0.0.0.0:9090 project_name.wsgi
+  ```
+- Run the IP in browser to check whether the page is running.
+---
+
+# Step 10:
