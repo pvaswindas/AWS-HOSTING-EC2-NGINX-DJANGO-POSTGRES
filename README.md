@@ -354,4 +354,48 @@ This command changes the ownership of the `static` directory and all its content
 - Run the IP in browser to check whether the page is running.
 ---
 
-# Step 10:
+# Step 10: Secure the Website with HTTPS
+
+- Install Certbot and the Nginx plugin:
+
+  ```nginx
+  sudo apt install certbot python3-certbot-nginx
+  ```
+- Obtain an SSL Certificate
+
+  To acquire an SSL certificate, execute the following command and follow the prompts:
+
+  `Replace your_domain.com with the domain name you purchased from GoDaddy`
+
+  ```bash
+  sudo certbot --nginx -d your_domain.com
+  ```
+
+  This will acquire an SSL certificate for your domain and configure Nginx to use it.
+
+- Update Nginx Configuration
+
+  After obtaining the SSL certificate, update your Nginx configuration file to use it. Open the configuration file in the text editor:
+
+  ```bash
+  sudo nano /etc/nginx/sites-available/your_site
+  ```
+- Locate the server block in your configuration file and insert the following lines within the server block:
+
+  ```nginx
+  listen [::]:443 ssl ipv6only=on;
+  listen 443 ssl;
+  ssl_certificate /etc/letsencrypt/live/your_domain.com/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/your_domain.com/privkey.pem;
+  include /etc/letsencrypt/options-ssl-nginx.conf;
+  ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+  ```
+  Save the file and exit the text editor.
+
+- Test and Reload Nginx
+
+  Before you restart Nginx, you should test the configuration to ensure there are no syntax errors:
+
+  ```nginx
+  sudo nginx -t
+  ```
