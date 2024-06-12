@@ -190,10 +190,6 @@ pip freeze
 python manage.py migrate
 ```
 
-```nginx
-python manage.py makemigrations
-```
-
 ##### Create Superuser :
 ```nginx
 python manage.py createsuperuser
