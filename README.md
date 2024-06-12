@@ -476,7 +476,8 @@ This command changes the ownership of the `static` directory and all its content
   ```nginx
   ALLOWED_HOSTS = ['Auto-assigned IP address', '0.0.0.0', 'your_domain_name.com', 'www.your_domain_name.com']
   ```
-- In the settings.py file, you may also need to set the DEBUG = False:
+- In the settings.py file, you may also need to set DEBUG = False so that standard error pages will be shown instead of developer errors:
+  
   ```nginx
   DEBUG = False
   ```
