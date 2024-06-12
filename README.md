@@ -306,7 +306,7 @@ server {
 - Now, load the page using the auto-assigned IP in your browser to verify if your page is loading.
 ---
 
-# There is a possibility that static files are not being served. If you encounter this issue, follow these steps; otherwise, skip these and proceed to step-10:
+# If you encounter an issue with static files not being served, follow these steps; otherwise, skip these and proceed to step-10:
 - Need to give location of the static files in the ngnix configuration
 - To do that, navigate to your root location. From there, navigate to the location where your static files are stored.
 - After navigating to the directory where your static files are stored, use the command `pwd` to display the path of the working directory.
