@@ -97,11 +97,21 @@ python3 -m venv env
 source env/bin/activate
 ```
 ### » Install psycopg2-binary
+
 ```nginx
 pip install psycopg2-binary
 ```
+### Before cloning your repository, ensure you have a "requirements.txt" file containing the project dependencies. If you already have this file, you can proceed to clone the Git repository and continue with the next steps.
+- Open your project locally using VS Code or PyCharm.
+- Activate your virtual environment and navigate to the root directory of your project, where "manage.py" exists.
+- Run this command:
+  ```nginx
+  pip freeze > requirements.txt
+  ```
+
 ### » Clone the git repository
 ##### Replace `<your-git-repository-url>` with the URL of your Git repository.
+
 ```nginx
 git clone <your-git-repository-url>
 ```
@@ -433,7 +443,7 @@ This command changes the ownership of the `static` directory and all its content
   sudo nano /etc/nginx/sites-available/your_site
   ```
   
-- Locate the server block in your configuration file and insert the following lines within the server block:
+- If the following lines are not automatically added, locate the server block in your configuration file and insert them within the server block:
 
   ```nginx
   listen [::]:443 ssl ipv6only=on;
@@ -458,6 +468,11 @@ This command changes the ownership of the `static` directory and all its content
 
   ```nginx
   sudo certbot renew --dry-run
+  ```
+- Navigate to the "settings.py" file and add the domain name's to the ALLOWED_HOSTS section:
+
+  ```nginx
+  ALLOWED_HOSTS = ['Auto-assigned IP address', '0.0.0.0', 'your_domain_name.com', 'www.your_domain_name.com']
   ```
 
 - Now you can check the page by running the server:
