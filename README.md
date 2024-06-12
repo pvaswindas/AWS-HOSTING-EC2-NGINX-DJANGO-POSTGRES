@@ -105,9 +105,11 @@ pip install psycopg2-binary
 - Open your project locally using VS Code or PyCharm.
 - Activate your virtual environment and navigate to the root directory of your project, where "manage.py" exists.
 - Run this command:
+
   ```nginx
   pip freeze > requirements.txt
   ```
+- Confirm the file creation by check your directory for the "requirements.txt" file.
 
 ### » Clone the git repository
 ##### Replace `<your-git-repository-url>` with the URL of your Git repository.
