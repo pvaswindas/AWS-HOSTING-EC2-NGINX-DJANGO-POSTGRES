@@ -57,7 +57,7 @@ sudo apt install python3-pip python3-dev libpq-dev postgresql postgresql-contrib
 - Create database   :
 
   ```nginx
-  CREATE DATABASE project_name;
+  CREATE DATABASE your_database_name;
   ```
 - Create user   :
 
@@ -65,9 +65,14 @@ sudo apt install python3-pip python3-dev libpq-dev postgresql postgresql-contrib
   CREATE USER user_name WITH PASSWORD 'password';
   ```
 - Grant permissions   :
-
+- Enter inside the created database using the command:
+  
   ```nginx
-  GRANT ALL PRIVILEGES ON DATABASE project_name TO user_name;
+  \c your_database_name
+  ```
+  
+  ```nginx
+  GRANT ALL PRIVILEGES ON DATABASE your_database_name TO user_name;
   ```
   ```nginx
   GRANT ALL PRIVILEGES ON SCHEMA PUBLIC TO username;
