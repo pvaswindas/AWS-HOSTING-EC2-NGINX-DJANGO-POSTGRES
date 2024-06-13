@@ -294,6 +294,13 @@ server {
   ```nginx
   ls
   ```
+- To verify the website runs, enter the default configuration file and comment out all lines. Otherwise, the default file will load when you access the IP address. Save and exit to continue.
+- Navigate to the /etc/nginx/sites-enabled/
+
+  ```nginx
+  sudo nano default
+  ```
+- Comment out all the lines in the default configuration, save the file, and exit.
 - We've added hosts for the website to run. Therefore, in our project's settings.py file, we need to include these hosts in the 'ALLOWED_HOSTS' area.
 - Navigate to the directory where your settings.py file exists, and open it using the command: `sudo nano settings.py`.
 - There will be a blank are for adding the "ALLOWED HOSTS", make the changes there:
