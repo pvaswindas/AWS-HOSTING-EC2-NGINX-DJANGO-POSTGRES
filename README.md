@@ -219,7 +219,7 @@ python manage.py collectstatic
 - You can check if Nginx is running using this command:
 
   ```nginx
-  sudo systemctl restart nginx
+  sudo systemctl status nginx
   ```
 - Now, verify that the server is running by accessing the Auto-assigned IP in the instance dashboard.
 - This should display the Nginx default page.
