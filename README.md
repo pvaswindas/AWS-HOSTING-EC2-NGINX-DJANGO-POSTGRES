@@ -14,7 +14,7 @@ This guide will walk you through the steps of hosting a Django project with Post
 - In the "Name and tags" section, enter your project name (optional).
 - Choose an operating system from the Application and OS Images section, `I prefer Ubuntu`.
 - Select an instance type that aligns with the requirements of your project.
-- Here we are configuring an EC2 instance with Ubuntu 64-bit OS and t3.micro type, eligible for AWS Free Tier.
+- Here we are configuring an EC2 instance with Ubuntu 64-bit OS and t3.micro or t2.micro type, which is eligible for AWS Free Tier choose that.
 - Create and download your PEM file from the "Key pair" section, giving it your project name.
   `Store the PEM file in an appropriate directory and do not delete it, as it cannot be recreated.`
 - Verify EC2 instance network settings and permissions: Ensure "Allow SSH," "Allow HTTPS," and "Allow HTTP" are enabled. Then, click "Launch Instance."
